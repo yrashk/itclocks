@@ -1,0 +1,73 @@
+=Simple demo run=
+This is just a simple example of how one can use the _Interval_ _Tree_ _Clocks_ library, both in C and JAVA.
+
+The image shows a run from ITC witch is divided in sections, each of witch represents an operation (_fork_, _event_ or a _join_). Each operation is also labeled with a letter, mapping itself with the operation being used in both demo runs.
+
+==Demo run==
+<a href="http://picasaweb.google.com/lh/photo/07P2CBMlkfauJ651E6eYpQ?feat=embedwebsite"><img src="http://lh3.ggpht.com/_tR0W8QwQsQY/S4ULQBCxDKI/AAAAAAAAAfQ/XW4C9AwOmJc/s800/execFlow.png" /></a>
+==Sample code C==
+
+{{{
+#include "itc.h"
+
+int main(){
+    stamp* seed = itc_seed(seed);
+	
+    stamp* a = newStamp(); // a
+    stamp* b = newStamp();
+    stamp* c = newStamp();
+	
+    itc_fork(seed, a, b); // b
+	
+    itc_event(a, a); // c
+    itc_event(b, b); // c
+	
+    itc_fork(a, a, c); // d
+    itc_event(b, b); // d
+	
+    itc_event(a, a); // e
+    itc_join(b, c, b); // e
+	
+    itc_fork(b, b, c); // f
+	
+    itc_join(a, b, a); // g
+	
+    itc_event(a, a); // h
+	
+    printStamp(a);
+    printStamp(c);	
+}
+}}}
+
+==Sample code JAVA==
+{{{
+import itc.*;
+
+public class teste2 {
+    public static void main(String[] args){
+        Stamp a = new Stamp(); // a
+        Stamp b = new Stamp();
+        Stamp c = new Stamp();
+
+        b = a.fork(); // b
+
+        a = a.event(); // c
+        b = b.event(); // c
+
+        c = a.fork(); // d
+        b = b.event(); // d
+
+        a = a.event(); // e
+        b.join(c); // e
+
+        c = b.fork(); // f
+
+        a.join(b); // g
+
+        a = a.event(); // h
+        
+        System.out.println(a.tostring());
+        System.out.println(c.tostring());
+    }
+}
+}}}
