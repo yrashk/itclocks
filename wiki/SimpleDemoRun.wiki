@@ -1,11 +1,14 @@
 =Simple demo run=
 This is just a simple example of how one can use the _Interval_ _Tree_ _Clocks_ library, both in C and JAVA.
 
-The image shows a run from ITC witch is divided in sections, each of witch represents an operation (_fork_, _event_ or a _join_). Each operation is also labeled with a letter, mapping itself with the operation being used in both demo runs.
-
 ==Demo run==
+The image shows a run from ITC witch is divided in sections. Each section represents the state of the system between operations (_fork_, _event_ or _join_) and is labeled with a letter. This letter maps the sta state of the operations presented in both demo programs.
+
 <a href="http://picasaweb.google.com/lh/photo/07P2CBMlkfauJ651E6eYpQ?feat=embedwebsite"><img src="http://lh3.ggpht.com/_tR0W8QwQsQY/S4ULQBCxDKI/AAAAAAAAAfQ/XW4C9AwOmJc/s800/execFlow.png" /></a>
 ==Sample code C==
+
+The initial Stamp must be initialized as a _seed_, after that, the Stamps are modified according to the operation that has been executed.
+All operations use pointers to Stamps and return an _int_ value as a result for the success of the operations, meaning that the resulting Stamp, or Stamps, are returned by reference.
 
 {{{
 #include "itc.h"
@@ -40,6 +43,8 @@ int main(){
 }}}
 
 ==Sample code JAVA==
+Using objects, in JAVA, every new Stamp is defined as a seed, meaning that there is no need to apply any method in order to create the seed Stamp. In this sample the methods that define the operations over the Stamps return the result, alternatives to this are defined in the API. As an example, a _Static_ join is implemented that reveices two Stamps and returns the resulting Stamp.
+
 {{{
 import itc.*;
 
