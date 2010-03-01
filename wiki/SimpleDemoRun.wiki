@@ -1,3 +1,5 @@
+<wiki:toc/>
+
 =Simple demo run=
 This is just a simple example of how one can use the _Interval_ _Tree_ _Clocks_ library, both in C and JAVA.
 
