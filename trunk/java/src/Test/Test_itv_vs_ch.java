@@ -91,8 +91,7 @@ public class Test_itv_vs_ch {
 				novo.join(outa, outb);
 				saco.push(novo);
 
-				Stamp novob = new Stamp();
-				novob.join(souta, soutb);
+				Stamp novob = Stamp.join(souta, soutb);
 				bag.push(novob);
 			}else{ // event
 				//System.out.println("Event _________________________");
