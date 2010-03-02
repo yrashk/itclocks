@@ -16,7 +16,7 @@ public class BitArray{
 		
 		this.startb = 0;
 		this.usedbs = 0;
-		this.freebs = this.dts; // only one is allocated, but not used yet
+		this.freebs = BitArray.dts; // only one is allocated, but not used yet
 	}
 	
 	public BitArray(char[] array){
@@ -24,18 +24,18 @@ public class BitArray{
 		this.freebs = array[1];
 		this.startb = array[2];
 		
-		int len = (int) (this.usedbs + this.freebs) / this.dts;
+		int len = (int) (this.usedbs + this.freebs) / BitArray.dts;
 		this.array = new char[len];
 		System.arraycopy(array, 3, this.array, 0, len);
 	}
 	
 	// Métodos de instância
 	public void expand(int nb){ // doubles the length
-		int len = (this.usedbs + this.freebs)/this.dts;
+		int len = (this.usedbs + this.freebs)/BitArray.dts;
 		int ene = len;
 		while(this.freebs < nb){
 			ene *= 2;
-			this.freebs += ((ene/2) * this.dts);
+			this.freebs += ((ene/2) * BitArray.dts);
 		}
 
 		char[] novo;
@@ -50,14 +50,14 @@ public class BitArray{
 			this.expand(nb);
 		}
 		
-		if ((this.usedbs%this.dts) > 0 && (this.freebs % dts) < nb){
-			char bitsleft = (char) (freebs % this.dts);
+		if ((this.usedbs%BitArray.dts) > 0 && (this.freebs % dts) < nb){
+			char bitsleft = (char) (freebs % BitArray.dts);
 			char mask = (char) (Math.pow((double) 2, (double) bitsleft) -1);
 			
 			char now = (char) (val & mask);
 			
-			char jump = (char) (this.usedbs / this.dts);
-			char bjump = (char) (this.usedbs % this.dts);
+			char jump = (char) (this.usedbs / BitArray.dts);
+			char bjump = (char) (this.usedbs % BitArray.dts);
 			
 			now = (char) (now << bjump);
 			this.array[jump] = (char) (this.array[jump] | now);
@@ -65,8 +65,8 @@ public class BitArray{
 			char then = (char) (val >> bitsleft);
 			this.array[jump + 1] = (char) (this.array[jump + 1] | then);
 		}else{
-			char jump = (char) (this.usedbs / this.dts);
-			char bjump = (char) (this.usedbs % this.dts);
+			char jump = (char) (this.usedbs / BitArray.dts);
+			char bjump = (char) (this.usedbs % BitArray.dts);
 			
 			char now = (char) (val << bjump);
 			array[jump] = (char) (array[jump] | (char) now);
@@ -112,8 +112,8 @@ public class BitArray{
 	}
 	
 	public char[] unify(){
-		int nfree = (int) this.freebs % this.dts;
-		int len = (this.usedbs + nfree) / this.dts;
+		int nfree = (int) this.freebs % BitArray.dts;
+		int len = (this.usedbs + nfree) / BitArray.dts;
 		
 		char[] res;
 		res = new char[3 + len];
@@ -131,7 +131,7 @@ public class BitArray{
 	}
 	
 	public int getLen(){
-		return (int) (this.freebs + this.usedbs)/this.dts;
+		return (int) (this.freebs + this.usedbs)/BitArray.dts;
 	}
 	
 
