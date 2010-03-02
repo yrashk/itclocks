@@ -15,8 +15,8 @@ public class Stamp{
 	}
 
 	public Stamp(Id i, Event e){
-		this.i = i;
-		this.e = e;
+		this.i = i.clone();
+		this.e = e.clone();
 	}
 
 	public Stamp(Stamp s){
