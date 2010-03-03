@@ -23,7 +23,7 @@ ITCs encode the state needed to track causality in a stamp, composed of an event
 
 = Simulating Version Vectors =
 
-First replicas need to be created. A seed stamp (with a special id component) is first created and the desired number of replicas can be created by forking this initial seed. Bellow we create 4 replicas:
+First replicas need to be created. A seed stamp (with a special id component) is first created and the desired number of replicas can be created by forking this initial seed. Bellow we create 4 replicas (Java objects a,b,c,d):
 
 {{{
 Stamp a = new Stamp(); // Seed
@@ -31,6 +31,9 @@ Stamp b = a.fork()
 Stamp c = a.fork()
 Stamp d= c.fork()
 }}}
+
+(Notice that any stamp can be forked, where we forked "a" twice and "c" once.)
+
 
 
 = Simulating Vector Clocks =
