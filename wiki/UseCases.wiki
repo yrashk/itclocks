@@ -32,9 +32,9 @@ Stamp c = a.fork();
 Stamp d= c.fork();
 }}}
 
-(Notice that any stamp can be forked, where we forked stamp a twice and stamp c once.)
+(Notice that any stamp can be forked, here we forked stamp a twice and stamp c once.)
 
-Since no events have been registered, these stamps all compare as equal. (insert java)
+Since no events have been registered, these stamps all compare as equal. Since a method _less or equal_ is provided, stamps x and y are equal when both x.leq(y) and y.leq(x) are true.
 
 Now, suppose that stamp b is associated to a file and this file that this file was modified. We
 note this by doing:
@@ -48,6 +48,9 @@ Now stamp b is greater than all the others. We can do the same in stamp d:
 {{{
 d=d.event();
 }}}
+
+These two stamps are concurrent. Thus b.leq(d) is false and d.leq(b) is also false.
+
 
  
 
