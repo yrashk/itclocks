@@ -45,7 +45,7 @@ int main(){
 }}}
 
 ==Sample code JAVA==
-Using objects, in JAVA, every new Stamp is defined as a seed, meaning that there is no need to apply any method in order to create the seed Stamp. In this sample the methods that define the operations over the Stamps return the result, alternatives to this are defined in the API. As an example, a _Static_ join is implemented that receives two Stamps and returns the resulting Stamp.
+When using objects, in JAVA, every new Stamp is defined as a seed, meaning that there is no need to apply any method in order to create the seed Stamp. In this sample the methods that define the operations over the Stamps return the result, alternatives to this are defined in the API. As an example, a _Static_ join is implemented, that receives two Stamps and returns the resulting Stamp.
 
 {{{
 import itc.*;
