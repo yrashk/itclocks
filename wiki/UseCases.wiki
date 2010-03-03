@@ -1,0 +1,19 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+Interval Tree Clocks can substitute both Version vectors and Vector clocks, and will excel in dynamic settings. 
+
+Version Vectors are used to track data dependency among replicas. They are used in replicated file systems (such as Coda) and in Cloud engines (such as Amazon Dynamo and Cassandra). 
+
+Vector Clocks track causality dependency between events in distributed processes. They are used in are used in group communication protocols (such as in the Spread toolkit), in consistent snapshots algorithms, etc.
+
+ 
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
