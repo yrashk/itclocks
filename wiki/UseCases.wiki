@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary High level presentation of ITCs and its use.
 
 = Introduction =
 
@@ -21,9 +21,17 @@ ITCs encode the state needed to track causality in a stamp, composed of an event
 
 (*Peek* is a special case of fork that only copies the event component and creates a new stamp with a null id. It can be used to make messages that transport causal information.)
 
-
-
 = Simulating Version Vectors =
+
+First replicas need to be created. A seed stamp (with a special id component) is first created and the desired number of replicas can be created by forking this initial seed. Bellow we create 4 replicas:
+
+{{{
+Stamp a = new Stamp(); // Seed
+Stamp b = a.fork()
+Stamp c = a.fork()
+Stamp d= c.fork()
+}}}
+
 
 = Simulating Vector Clocks =
 
