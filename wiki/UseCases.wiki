@@ -27,12 +27,30 @@ First replicas need to be created. A seed stamp (with a special id component) is
 
 {{{
 Stamp a = new Stamp(); // Seed
-Stamp b = a.fork()
-Stamp c = a.fork()
-Stamp d= c.fork()
+Stamp b = a.fork();
+Stamp c = a.fork();
+Stamp d= c.fork();
 }}}
 
-(Notice that any stamp can be forked, where we forked "a" twice and "c" once.)
+(Notice that any stamp can be forked, where we forked stamp a twice and stamp c once.)
+
+Since no events have been registered, these stamps all compare as equal. (insert java)
+
+Now, suppose that stamp b is associated to a file and this file that this file was modified. We
+note this by doing:
+
+{{{
+b=b.event();
+}}}
+
+Now stamp b is greater than all the others. We can do the same in stamp d:
+
+{{{
+d=d.event();
+}}}
+
+ 
+
 
 
 
