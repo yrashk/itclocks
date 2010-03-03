@@ -2,16 +2,32 @@
 
 = Introduction =
 
-Interval Tree Clocks can substitute both Version vectors and Vector clocks, and will excel in dynamic settings. 
+Interval Tree Clocks can substitute both Version vectors and Vector clocks. 
 
 Version Vectors are used to track data dependency among replicas. They are used in replicated file systems (such as Coda) and in Cloud engines (such as Amazon Dynamo and Cassandra). 
 
 Vector Clocks track causality dependency between events in distributed processes. They are used in are used in group communication protocols (such as in the Spread toolkit), in consistent snapshots algorithms, etc.
 
- 
+ITCs can be used in all these settings and will excel in dynamic settings, i.e. whenever the number and set of active entities varies during the system execution, since it allows localized introduction and removal of entities. 
+Before ITCs, the typical strategy to address these dynamic settings was to implement the classical vectors as mappings from a globally unique id to an integer counter. The drawback is that unique ids are not space efficient and that if the active entities change over time (under churn) the state dedicated to the mapping will keep growing. This has lead to ad-hoc pruning solutions (e.g. in Dynamo) that can introduce errors and compromise causality tracking. 
+
+ITCs encode the state needed to track causality in a stamp, composed of an event and id component, and introduce 3 basic operations:
+
+*Fork* is used to introduce new stamps. Allows the cloning of the causal past of a stamp, resulting in a pair of stamps that have identical copies of the event component and distinct ids. E.g. it can be used to introduce new replicas to a system.
+
+*Join* is used to merge two stamps. Produces a new stamp that incorporates both causal pasts. E.g. it can be used to retire replicas or receive causal information from messages.
+
+*Event* is used to add causal information to a stamp, "incrementing" the event component and keeping the id.
+
+(*Peek* is a special case of fork that only copies the event component and creates a new stamp with a null id. It can be used to make messages that transport causal information.)
 
 
-= Details =
+
+= Simulating Version Vectors =
+
+= Simulating Vector Clocks =
+
+= Use cases =
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
