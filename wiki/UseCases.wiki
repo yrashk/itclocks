@@ -36,14 +36,14 @@ Stamp d= c.fork();
 
 Since no events have been registered, these stamps all compare as equal. Since a stamp method leq (_less or equal_) is provided, stamps x and y are equal when both x.leq(y) and y.leq(x) are true.
 
-Now, suppose that stamp b is associated to a file and this file that this file was modified. We
+Now, suppose that stamp b is associated to a ReplicaB and this replica was modified. We
 note this by doing:
 
 {{{
 b=b.event();
 }}}
 
-Now stamp b is greater than all the others. We can do the same in stamp d:
+Now stamp b is greater than all the others. We can do the same in stamp d to denote an update on ReplicaD:
 
 {{{
 d=d.event();
@@ -51,9 +51,21 @@ d=d.event();
 
 These two stamps are now concurrent. Thus b.leq(d) is false and d.leq(b) is also false.
 
+Now suppose that we want to merge the updates in ReplicaB and ReplicaD. One way is to
+create a replica that reflects both updates, merging the state of either replica into the other:
 
+{{{
+b.join(d);
+}}}
 
+This stamp b will now have new id, joining the ids in b and d. 
+An alternative way, that keeps the number of replicas/stamps and does not form new ids, is to exchange events between both replicas.
 
+{{{
+b=b.join(d.peek());
+d=d.join(b.peek());
+}}}
+ 
 = Simulating Vector Clocks =
 
 = Use cases =
