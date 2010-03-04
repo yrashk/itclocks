@@ -70,5 +70,4 @@ Now, stamps b and d are no longer concurrent and will compare as equal, since th
 = Simulating Vector Clocks =
 
 
-
 = Use cases =
