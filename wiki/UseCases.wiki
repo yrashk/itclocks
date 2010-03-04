@@ -62,15 +62,10 @@ This stamp b will now have new id, joining the ids in b and d.
 An alternative way, that keeps the number of replicas/stamps and does not form new ids, is to exchange events between both replicas.
 
 {{{
-b=b.join(d.peek());
-d=d.join(b.peek());
+b.join(d.peek());
+d.join(b.peek());
 }}}
  
 = Simulating Vector Clocks =
 
 = Use cases =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
