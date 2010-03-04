@@ -58,15 +58,14 @@ create a replica that reflects both updates, merging the state of either replica
 b.join(d);
 }}}
 
-This stamp b will now have new id, joining the ids in b and d. 
-An alternative way, that keeps the number of replicas/stamps and does not form new ids, is to exchange events between both replicas.
+This stamp b will now have a new id, joining the ids in b and d, and have an event component that holds both issued events.  An alternative way, that keeps the number of replicas/stamps and does not form new ids, is to exchange events between both replicas.
 
 {{{
 b.join(d.peek());
 d.join(b.peek());
 }}}
 
-Now, stamps b and d are now longer concurrent and will compare as equal, since they depict the same events. 
+Now, stamps b and d are no longer concurrent and will compare as equal, since they depict the same events. 
 
 = Simulating Vector Clocks =
 
