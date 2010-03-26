@@ -17,4 +17,4 @@ causalh.o : causalh.h causalh.c
 	gcc -c causalh.c
 
 clean :
-	rm *.o
+	rm -f *.o *.gch este *.out binaryfile filebin main tempfile teste1
