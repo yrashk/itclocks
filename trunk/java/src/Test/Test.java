@@ -1,20 +1,15 @@
 package Test;
 
-
 import util.Bag;
-import util.Pair;
 import util.Dice;
 import itc.Stamp;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-public class Test implements Runnable{
+public class Test implements Runnable {
 
 	private final static String PATH = "/Volumes/Varios/Dropbox/MI/2ano/tese/test_runs";
 	private final static String TEST_NAME = "itc_test_";
@@ -24,8 +19,6 @@ public class Test implements Runnable{
 	private int number_processes;
 	private int number_iterations;
 	private float ratio_loss;
-
-
 
 	public Test(int np, int ni, float rl) {
 		number_processes = np;
@@ -41,8 +34,8 @@ public class Test implements Runnable{
 			runs = new File(PATH);
 			number_test = 1;
 			File[] files = runs.listFiles();
-			for(File f : files) {
-				if(f.getName().startsWith(TEST_NAME+number_processes+ "_" + ratio_loss)) {
+			for (File f : files) {
+				if (f.getName().startsWith(TEST_NAME + number_processes + "_" + ratio_loss)) {
 					number_test++;
 				}
 			}
@@ -51,16 +44,15 @@ public class Test implements Runnable{
 			GregorianCalendar gc = new GregorianCalendar(tz);
 			String time = ((gc.getTimeInMillis()) + "");
 			runs = new File(PATH + File.separator + TEST_NAME + number_processes + "_" + ratio_loss + "_" + number_test + "_" + time + ".dat");
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-
 	public void average_results(int nRep) {
 
 		//average all
-		if(nRep==0) {
+		if (nRep == 0) {
 			//code
 			return;
 		}
@@ -70,13 +62,12 @@ public class Test implements Runnable{
 
 	}
 
-
 	public void run() {
 		try {
 			out = new BufferedWriter(new FileWriter(runs));
 
 			testITC_data_causality(number_processes, number_iterations, ratio_loss);
-	//		testITC_process_causality(number_processes,number_iterations,0.5f,1.0f);
+			//		testITC_process_causality(number_processes,number_iterations,0.5f,1.0f);
 
 			out.close();
 		} catch (IOException ex) {
@@ -84,15 +75,13 @@ public class Test implements Runnable{
 		}
 	}
 
-
-
 	public void testITC_data_causality(int nRep, int nIter, float ratio_loss) throws IOException {
 
 		out.write("# Automatic Test for ITC\n");
-		out.write("# Number of Replicas: "+nRep+"\n");
-		out.write("# Number of Iterations: "+nIter+"\n");
-		out.write("# Ration Loss: "+ratio_loss+"\n");
-		out.write("# Test Number: "+number_test+"\n");
+		out.write("# Number of Replicas: " + nRep + "\n");
+		out.write("# Number of Iterations: " + nIter + "\n");
+		out.write("# Ration Loss: " + ratio_loss + "\n");
+		out.write("# Test Number: " + number_test + "\n");
 
 		// ITC mechanism
 		Bag<Stamp> bag = new Bag<Stamp>();
@@ -100,40 +89,40 @@ public class Test implements Runnable{
 		bag.push(seed);
 
 		Dice dice = new Dice();
-		int i,j;
+		int i, j;
 
-		for(i=0 ; i<nRep-1 ; i++) {
+		for (i = 0; i < nRep - 1; i++) {
 
 			//fork
 			Stamp s = bag.pop();
 			Stamp s2 = s.fork();
 			bag.push(s);
 			bag.push(s2);
-			
+
 			//size
 			float size = 0.0f;
 			float size_for_one = 0.0f;
-			for(Stamp st : bag.getList()) {
+			for (Stamp st : bag.getList()) {
 				size += st.sizeInBytes();
 			}
-			size_for_one = (size/nRep);
+			size_for_one = (size / nRep);
 
 			//printing
-			if(i%5000==0) {
-				System.out.println("It "+i+" - nRep "+bag.getSize()+" - sizeBytes T: "+size+" A:"+size_for_one);
+			if (i % 5000 == 0) {
+				System.out.println("It " + i + " - nRep " + bag.getSize() + " - sizeBytes T: " + size + " A:" + size_for_one);
 			}
-			out.write(i+"\t"+size_for_one+"\n");
+			out.write(i + "\t" + size_for_one + "\n");
 		}
 
-		for(; i<nIter ; i++) {
+		for (; i < nIter; i++) {
 			Stamp s;
 			Stamp s2;
 
 			//fork
 			int sizeBag = bag.getSize();
-			int nForks = (nRep+1)-sizeBag;
+			int nForks = (nRep + 1) - sizeBag;
 //			System.out.println("nForks "+nForks);
-			for(j=0 ; j<nForks ; j++) {
+			for (j = 0; j < nForks; j++) {
 				s = bag.pop();
 				s2 = s.fork();
 				bag.push(s);
@@ -141,13 +130,14 @@ public class Test implements Runnable{
 			}
 
 			//event
-			s = bag.pop().event();
+			s = bag.pop();
+			s.event();
 			bag.push(s);
 
 			//join
 			s = bag.pop();
 			s2 = bag.pop();
-			if(dice.roll() >= (ratio_loss*100)) {
+			if (dice.roll() >= (ratio_loss * 100)) {
 				s = Stamp.join(s, s2);
 			} else {
 //				System.out.println("LOSS");
@@ -157,21 +147,18 @@ public class Test implements Runnable{
 			//size
 			float size = 0.0f;
 			float size_for_one = 0.0f;
-			for(Stamp st : bag.getList()) {
+			for (Stamp st : bag.getList()) {
 				size += st.sizeInBytes();
 			}
-			size_for_one = (size/nRep);
+			size_for_one = (size / nRep);
 
 			//printing
-			if(i%50==0) {
-				System.out.println("It "+i+" - nRep "+bag.getSize()+" - sizeBytes T: "+size+" A:"+size_for_one);
+			if (i % 50 == 0) {
+				System.out.println("It " + i + " - nRep " + bag.getSize() + " - sizeBytes T: " + size + " A:" + size_for_one);
 			}
-			out.write(i+"\t"+size_for_one+"\n");
+			out.write(i + "\t" + size_for_one + "\n");
 		}
 	}
-
-
-
 
 	public void testITC_process_causality(int nRep, int nIter, float ratio_events, float ratio) {
 
@@ -180,11 +167,11 @@ public class Test implements Runnable{
 		Stamp seed = new Stamp();
 		bag.push(seed);
 
-		int i,j;
+		int i, j;
 
 		int nEvents = (int) (nRep * ratio_events);
 
-		for(i=0 ; i<nRep-1 ; i++) {
+		for (i = 0; i < nRep - 1; i++) {
 			//fork
 			Stamp s = bag.pop();
 			Stamp s2 = s.fork();
@@ -193,15 +180,15 @@ public class Test implements Runnable{
 
 			//size
 			float size = 0.0f;
-			for(Stamp st : bag.getList()) {
+			for (Stamp st : bag.getList()) {
 				size += st.sizeInBytes();
 			}
-			
+
 			//printing
-			System.out.println("It "+i+" - nRep "+bag.getSize()+" - sizeBytes T: "+size+" A:"+(size/nRep));
+			System.out.println("It " + i + " - nRep " + bag.getSize() + " - sizeBytes T: " + size + " A:" + (size / nRep));
 		}
 
-		for(i=0 ; i<nIter ; i++) {
+		for (i = 0; i < nIter; i++) {
 			//peek
 			Stamp s = bag.pop();
 			Stamp s2 = bag.pop();
@@ -211,28 +198,27 @@ public class Test implements Runnable{
 			bag.push(s2);
 
 			//events
-			for(j=0 ; j<nEvents ; j++) {
-				s = bag.pop().event();
+			for (j = 0; j < nEvents; j++) {
+				s = bag.pop();
+				s.event();
 				bag.push(s);
 			}
 
 			//size
 			int size = 0;
-			for(Stamp st : bag.getList()) {
+			for (Stamp st : bag.getList()) {
 				size += st.sizeInBytes();
 			}
 
 			//printing
-			System.out.println("It "+i+" - nRep "+bag.getSize()+" - sizeBytes T: "+size+" A:"+(int)(size/nRep));
+			System.out.println("It " + i + " - nRep " + bag.getSize() + " - sizeBytes T: " + size + " A:" + (int) (size / nRep));
 		}
 	}
 
-
-
 	public static void main(String[] args) {
 
-		for(int i = 0 ; i< 10 ; i++) {
-			Thread t = new Thread(new Test(8,100000,0.0f));
+		for (int i = 0; i < 10; i++) {
+			Thread t = new Thread(new Test(8, 100000, 0.0f));
 			t.setPriority(Thread.MAX_PRIORITY);
 			t.start();
 			try {
@@ -241,7 +227,7 @@ public class Test implements Runnable{
 				Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
-		
+
 //
 //		String PATH2 = "/Volumes/Varios/Dropbox/MI/2ano/tese/test_runs";
 //		String TEST_NAME2 = "itc_test_";
@@ -323,7 +309,6 @@ public class Test implements Runnable{
 
 
 	}
-
 }
 
 
