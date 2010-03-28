@@ -2,20 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Test;
 
-
 import causal_histories.*;
-import itc.*;
+import itc.Stamp;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import util.*;
 
 public class Test_itv_vs_ch {
 
-
-
 	public static void main(String[] args) {
+		long start = System.currentTimeMillis();
 		(new Test_itv_vs_ch()).CHvsITC();
+		long finish = System.currentTimeMillis();
+		System.out.println("TIME:" + (finish - start) / 1000.0f);
 	}
 
 	public void CHvsITC() {
@@ -42,11 +46,12 @@ public class Test_itv_vs_ch {
 
 		int i;
 		int counter = 0;
-		for (i = 0; i < 1000; i++){
+		for (i = 0; i < 1000; i++) {
+			System.out.println(i + 1 + ": bugs->" +counter);
 			int tipo = dado.iroll(1, 100);
 
-			if ( tipo <= 34  || saco.getSize() == 1){ // fork
-				//System.out.println("Fork __________________________");
+			if (tipo <= 34 || saco.getSize() == 1) { // fork
+//				System.out.println("Fork __________________________");
 				forks++;
 				int ind = saco.getValidIndice();
 
@@ -68,14 +73,14 @@ public class Test_itv_vs_ch {
 
 				// mecanismo itc funcional
 				Stamp outb = (Stamp) bag.popInd(ind);
-				Pair<Stamp> p = outb.fork2();
-				Stamp in1 = (Stamp) p.getEa();
-				Stamp in2 = (Stamp) p.getEb();
+				Stamp[] p = Stamp.fork(outb);
+				Stamp in1 = p[0];
+				Stamp in2 = p[1];
 
 				bag.push(in1);
 				bag.push(in2);
-			}else if ( tipo <= 66){ // join
-				//System.out.println("Join __________________________");
+			} else if (tipo <= 66) { // join
+//				System.out.println("Join __________________________");
 				joins++;
 				int inda = saco.getValidIndice();
 
@@ -93,8 +98,8 @@ public class Test_itv_vs_ch {
 
 				Stamp novob = Stamp.join(souta, soutb);
 				bag.push(novob);
-			}else{ // event
-				//System.out.println("Event _________________________");
+			} else { // event
+//				System.out.println("Event _________________________");
 				events++;
 				int ind = saco.getValidIndice();
 
@@ -103,43 +108,61 @@ public class Test_itv_vs_ch {
 				saco.push(out);
 
 				Stamp outb = (Stamp) bag.popInd(ind);
-				Stamp in = new Stamp();
-				in = outb.event();
-				bag.push(in);
+//				System.out.println("ANTES:"+outb.toString());
+				outb.event();
+//				System.out.println("DPS:"+outb.toString());
+				bag.push(outb);
 			}
 
-			CStamp tmp = new CStamp();
-			tmp = (CStamp) saco.getLast();
-			Stamp tmpb = new Stamp();
-			tmpb = (Stamp) bag.getLast();
-			int len = saco.getSize();
+//			CStamp tmp = new CStamp();
+//			tmp = (CStamp) saco.getLast();
+//			Stamp tmpb = new Stamp();
+//			tmpb = (Stamp) bag.getLast();
+//			int len = saco.getSize();
+//
+//			for (int n = 0; n < len - 1; n++) {
+//				boolean a = tmp.equals((CStamp) saco.getInd(n));
+//
+//				Stamp decd = new Stamp();
+//				char[] coise = bag.getInd(n).Encode();
+//				decd.Decode(coise);
+////				decd.dDecode(bag.getInd(n).dEncode());
+//				boolean b = tmpb.equals(decd);
+////				boolean b = tmpb.equals((Stamp) bag.getInd(n));
+//				if (!((a && b) || (!a && !b))) {
+//					System.out.println("Devia ser "+a+", mas e "+b+"\n\t"+tmpb.toString()+ "   E    "+decd.toString());
+//					counter++;
+//				}
+//			}
 
-			for (int n = 0; n < len-1; n++){
-				boolean a = tmp.leq((CStamp) saco.getInd(n));
-
-				Stamp decd = new Stamp();
-				decd.dDecode(bag.getInd(n).dEncode());
-				boolean b = tmpb.leq(decd);
-				if (!((a && b) || (!a && !b))){
-					//System.out.println("Bug " + a + " " + b + "                                                   xxxs");
-					//System.out.println(tmp.tostring());
-					//System.out.println(((CStamp) saco.getInd(n)).tostring());
-					//System.out.println(tmpb.tostring());
-					//System.out.println(((Stamp) bag.getInd(n)).tostring());
-
-					counter++;
-				}
-			}
 		}
-		System.out.println(" Bugs : "+counter);
+
+//		File f = new File("binaryfile");
+//
+//		try {
+//			DataOutputStream out = new DataOutputStream(new FileOutputStream(f));
+//
+//			bag.saveBag(out);
+//
+//			out.close();
+//
+//			DataInputStream in = new DataInputStream(new FileInputStream(f));
+//
+//			Bag<Stamp> bbb = new Bag();
+//			bbb.loadBag(in);
+//
+//
+////			System.out.print(bbb.toString());
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//		}
+
+		System.out.println(" Bugs : " + counter);
 		System.out.println("=======================");
-		System.out.println(" Forks  : "+forks);
-		System.out.println(" Joins  : "+joins);
-		System.out.println(" Events : "+events);
+		System.out.println(" Forks  : " + forks);
+		System.out.println(" Joins  : " + joins);
+		System.out.println(" Events : " + events);
 		System.out.println("");
-		System.out.println(" Bag final size : "+bag.getSize());
+		System.out.println(" Bag final size : " + bag.getSize());
 	}
-
-
-
 }
