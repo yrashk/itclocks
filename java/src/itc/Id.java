@@ -32,58 +32,7 @@ public class Id {
 		this.right = (er==null) ? null : er.clone();
 	}
 
-	public Id split() { // split shall return the right hand id of the result, while making himself the left hand id
-		Id i2 = new Id();
-
-		if (this.isLeaf && this.value == 0) { // id = 0
-			this.setAsLeaf();
-			this.value = 0;
-
-			i2.setAsLeaf();
-			i2.setValue(0);
-		} else if (this.isLeaf && this.value == 1) { // id = 1
-			this.setAsNode();
-			this.value = 0;
-			this.left = new Id(1);
-			this.right = new Id(0);
-
-			i2.setAsNode();
-			i2.setLeft(new Id(0));
-			i2.setRight(new Id(1));
-		} else {
-			if (this.isLeaf == false && (this.left.isLeaf && this.left.getValue() == 0) && (this.right.isLeaf == false || this.right.getValue() == 1)) { // id = (0, i)
-				this.setAsNode();
-				this.value = 0;
-				this.left = new Id(0);
-
-				i2.setAsNode();
-				i2.setLeft(new Id(0));
-				i2.setRight(this.right.split());
-			} else if (this.isLeaf == false && (this.left.isLeaf == false || this.left.getValue() == 1) && (this.right.isLeaf && this.right.getValue() == 0)) { // id = (i, 0)
-				this.setAsNode();
-				this.value = 0;
-				this.right = new Id(0);
-
-				i2.setAsNode();
-				i2.setLeft(this.left.split());
-				i2.setRight(new Id(0));
-			} else if (this.isLeaf == false && (this.left.isLeaf == false || this.left.getValue() == 1) && (this.right.isLeaf == false || this.right.getValue() == 1)) { // id = (i1, i2)
-				i2.setAsNode();
-				i2.setRight(this.right);
-				i2.setLeft(new Id(0));
-
-				this.setAsNode();
-				this.value = 0;
-				// this.i1 = this.i1;
-				this.right = new Id(0);
-			} else {
-				System.out.println("Bug..." + this.toString());
-			}
-		}
-		return i2;
-	}
-
-	public Id[] split2() {
+	public Id[] split() {
 		Id i1 = new Id();
 		Id i2 = new Id();
 
@@ -106,7 +55,7 @@ public class Id {
 			i2.setRight(new Id(1));
 		} else {
 			if (this.isLeaf == false && (this.left.isLeaf && this.left.getValue() == 0) && (this.right.isLeaf == false || this.right.getValue() == 1)) { // id = (0, i)
-				Id[] ip = this.right.split2();
+				Id[] ip = this.right.split();
 
 				i1.setAsNode();
 				i1.setValue(0);
@@ -118,7 +67,7 @@ public class Id {
 				i2.setLeft(new Id(0));
 				i2.setRight(ip[1]);
 			} else if (this.isLeaf == false && (this.left.isLeaf == false || this.left.getValue() == 1) && (this.right.isLeaf && this.right.getValue() == 0)) { // id = (i, 0)
-				Id[] ip = this.left.split2();
+				Id[] ip = this.left.split();
 
 				i1.setAsNode();
 				i1.setValue(0);

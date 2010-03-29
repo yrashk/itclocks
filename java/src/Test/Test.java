@@ -217,7 +217,7 @@ public class Test implements Runnable {
 
 	public static void main(String[] args) {
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 2; i++) {
 			Thread t = new Thread(new Test(8, 100000, 0.0f));
 			t.setPriority(Thread.MAX_PRIORITY);
 			t.start();

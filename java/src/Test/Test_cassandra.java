@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Test_cassandra implements Runnable {
 
@@ -358,93 +360,93 @@ public class Test_cassandra implements Runnable {
 //	}
 	public static void main(String[] args) {
 //
-//		for(int i = 0 ; i< 10 ; i++) {
-//			Thread t = new Thread(new Test_cassandra(128,128,100000,0.0f));
-//			t.setPriority(Thread.MAX_PRIORITY);
-//			t.start();
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException ex) {
-//				Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-//			}
-//		}
-//
-//
-		String PATH2 = "/Volumes/Varios/Dropbox/MI/2ano/tese/test_runs";
-		String TEST_NAME2 = "itc_test_cass_";
-		File runs2 = null;
-
-		ArrayList<File> files2 = new ArrayList<File>();
-
-		try {
-
-			runs2 = new File(PATH2);
-			File[] files = runs2.listFiles();
-			for (File f : files) {
-				if (f.getName().startsWith(TEST_NAME2 + "128_1280.0_")) {
-					System.out.println("YES: " + f.getName());
-					files2.add(f);
-				}
+		for(int i = 0 ; i< 2 ; i++) {
+			Thread t = new Thread(new Test_cassandra(32,32,10000,0.0f));
+			t.setPriority(Thread.MAX_PRIORITY);
+			t.start();
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException ex) {
+				Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
 			}
-
-			HashMap<Integer, Float> results = new HashMap<Integer, Float>();
-			int number_files = files2.size();
-
-			for (File ff : files2) {
-
-				System.out.println("DOING " + ff.getName());
-
-				// command line parameter
-				FileInputStream fstream = new FileInputStream(ff);
-				// Get the object of DataInputStream
-				DataInputStream in = new DataInputStream(fstream);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in));
-				String strLine;
-				//Read File Line By Line
-				while ((strLine = br.readLine()) != null) {
-					// Print the content on the console
-					if (!strLine.startsWith("#")) {
-//						System.out.println (strLine.trim());
-						String[] numbers = strLine.trim().split("\t");
-						int it = Integer.parseInt(numbers[0].trim());
-						float size = Float.parseFloat(numbers[1].trim());
-//						System.out.println ("IT:"+it+" size:"+size);
-						if (results.containsKey(it)) {
-							float res = results.get(it) + (size / number_files);
-							results.put(it, res);
-						} else {
-							float res = (size / number_files);
-							results.put(it, res);
-						}
-					}
-
-				}
-
-				in.close();
-
-			}
-//
-//			TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
-//			GregorianCalendar gc = new GregorianCalendar(tz);
-//			String time = ((gc.getTimeInMillis()) + "");
-//			runs2 = new File(PATH2 + File.separator + TEST_NAME2 + number_processes + "_" + ratio_loss + "_" + number_test + "_" + time + ".dat");
-
-
-			File resultado = new File(PATH2 + File.separator + "itc_test_cass_128_128_0.0.dat");
-
-			// Create file
-			FileWriter fstream = new FileWriter(resultado);
-			BufferedWriter out = new BufferedWriter(fstream);
-			for (Integer key : results.keySet()) {
-				out.write(key + "\t" + results.get(key) + "\n");
-			}
-			//Close the output stream
-			out.close();
-			//Read File Line By Line
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+//
+////
+//		String PATH2 = "/Volumes/Varios/Dropbox/MI/2ano/tese/test_runs";
+//		String TEST_NAME2 = "itc_test_cass_";
+//		File runs2 = null;
+//
+//		ArrayList<File> files2 = new ArrayList<File>();
+//
+//		try {
+//
+//			runs2 = new File(PATH2);
+//			File[] files = runs2.listFiles();
+//			for (File f : files) {
+//				if (f.getName().startsWith(TEST_NAME2 + "128_1280.0_")) {
+//					System.out.println("YES: " + f.getName());
+//					files2.add(f);
+//				}
+//			}
+
+//			HashMap<Integer, Float> results = new HashMap<Integer, Float>();
+//			int number_files = files2.size();
+//
+//			for (File ff : files2) {
+//
+//				System.out.println("DOING " + ff.getName());
+//
+//				// command line parameter
+//				FileInputStream fstream = new FileInputStream(ff);
+//				// Get the object of DataInputStream
+//				DataInputStream in = new DataInputStream(fstream);
+//				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+//				String strLine;
+//				//Read File Line By Line
+//				while ((strLine = br.readLine()) != null) {
+//					// Print the content on the console
+//					if (!strLine.startsWith("#")) {
+////						System.out.println (strLine.trim());
+//						String[] numbers = strLine.trim().split("\t");
+//						int it = Integer.parseInt(numbers[0].trim());
+//						float size = Float.parseFloat(numbers[1].trim());
+////						System.out.println ("IT:"+it+" size:"+size);
+//						if (results.containsKey(it)) {
+//							float res = results.get(it) + (size / number_files);
+//							results.put(it, res);
+//						} else {
+//							float res = (size / number_files);
+//							results.put(it, res);
+//						}
+//					}
+//
+//				}
+//
+//				in.close();
+//
+//			}
+//
+////			TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
+////			GregorianCalendar gc = new GregorianCalendar(tz);
+////			String time = ((gc.getTimeInMillis()) + "");
+////			runs2 = new File(PATH2 + File.separator + TEST_NAME2 + number_processes + "_" + ratio_loss + "_" + number_test + "_" + time + ".dat");
+//
+//
+//			File resultado = new File(PATH2 + File.separator + "itc_test_cass_128_128_0.0.dat");
+//
+//			// Create file
+//			FileWriter fstream = new FileWriter(resultado);
+//			BufferedWriter out = new BufferedWriter(fstream);
+//			for (Integer key : results.keySet()) {
+//				out.write(key + "\t" + results.get(key) + "\n");
+//			}
+//			//Close the output stream
+//			out.close();
+//			//Read File Line By Line
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 
 

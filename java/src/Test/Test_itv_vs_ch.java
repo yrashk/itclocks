@@ -51,7 +51,7 @@ public class Test_itv_vs_ch {
 			int tipo = dado.iroll(1, 100);
 
 			if (tipo <= 34 || saco.getSize() == 1) { // fork
-//				System.out.println("Fork __________________________");
+				System.out.println("Fork __________________________");
 				forks++;
 				int ind = saco.getValidIndice();
 
@@ -64,23 +64,22 @@ public class Test_itv_vs_ch {
 				saco.push(novo);
 
 				// mecanismo itc in place
-				/*Stamp sout = (Stamp) bag.popInd(ind);
-				Stamp sin = new Stamp();
-				sin = sout.fork();
+				Stamp sout = (Stamp) bag.popInd(ind);
+				Stamp sin = sout.fork();
 
 				bag.push(sout);
-				bag.push(sin);*/
+				bag.push(sin);
 
-				// mecanismo itc funcional
-				Stamp outb = (Stamp) bag.popInd(ind);
-				Stamp[] p = Stamp.fork(outb);
-				Stamp in1 = p[0];
-				Stamp in2 = p[1];
-
-				bag.push(in1);
-				bag.push(in2);
+//				// mecanismo itc funcional
+//				Stamp outb = (Stamp) bag.popInd(ind);
+//				Stamp[] p = Stamp.fork(outb);
+//				Stamp in1 = p[0];
+//				Stamp in2 = p[1];
+//
+//				bag.push(in1);
+//				bag.push(in2);
 			} else if (tipo <= 66) { // join
-//				System.out.println("Join __________________________");
+				System.out.println("Join __________________________");
 				joins++;
 				int inda = saco.getValidIndice();
 
@@ -96,10 +95,12 @@ public class Test_itv_vs_ch {
 				novo.join(outa, outb);
 				saco.push(novo);
 
-				Stamp novob = Stamp.join(souta, soutb);
-				bag.push(novob);
+//				Stamp novob = Stamp.join(souta, soutb);
+//				bag.push(novob);
+				souta.join(soutb);
+				bag.push(souta);
 			} else { // event
-//				System.out.println("Event _________________________");
+				System.out.println("Event _________________________");
 				events++;
 				int ind = saco.getValidIndice();
 
