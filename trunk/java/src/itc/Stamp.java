@@ -25,11 +25,15 @@ public class Stamp {
 		this.id = s.getId();
 	}
 
-	public Stamp fork() { // self fork : s1 self (left), return s2 // new policy return a Stamp
+	public Stamp fork() {
 
 		Stamp st = new Stamp();
 		st.setEvent(this.event.clone());
-		st.setId(this.id.split()); // split shall return the right hand id, while making himself the left hand id
+//		st.setId(this.id.split());
+
+		Id[] par = this.id.split();
+		this.id = par[0];
+		st.setId(par[1]);
 
 		return st;
 	}
@@ -37,12 +41,12 @@ public class Stamp {
 	public static Stamp[] fork(Stamp st) {
 		Stamp b = new Stamp();
 		b.setEvent(st.getEvent().clone());
+//
+//		if(b.getEvent().equals(st.getEvent()) == false) {
+//			System.out.println("Fail @ Fork: events not equal -> EV1:"+b.getEvent().toString()+"\nEV2:"+st.getEvent().toString());
+//		}
 
-		if(b.getEvent().equals(st.getEvent()) == false) {
-			System.out.println("NOOOO WTSDGSGVS\nEV1:"+b.getEvent().toString()+"\nEV2:"+st.getEvent().toString());
-		}
-
-		Id[] par = st.getId().split2();
+		Id[] par = st.getId().split();
 		st.setId(par[0]);
 		b.setId(par[1]);
 
@@ -70,6 +74,12 @@ public class Stamp {
 		return new Stamp(i, ev);
 	}
 
+	public static Stamp peek(Stamp st) {
+		Id i = new Id(0);
+		Event ev = st.getEvent().clone();
+		return new Stamp(i, ev);
+	}
+
 	public void event() {
 		Event old = event.clone();
 		Stamp.fill(id, event);
@@ -78,13 +88,6 @@ public class Stamp {
 		if (not_filled) {
 			Stamp.grow(id, event);
 		}
-		/*event({I, E}) ->
-		{I,
-		case fill(I, E) of
-		E -> {_, E1} = grow(I, E), E1;
-		E1 -> E1
-		end
-		}.*/
 	}
 
 	public static Stamp event(Stamp st) { // returns the new updated Stamp
@@ -126,27 +129,6 @@ public class Stamp {
 		} else {
 			System.out.println("ERROR Fill\n ID:"+ i.toString()+"\n Ev:"+e.toString());
 		}
-
-		/*
-		fill(0, E) -> E;
-		 *
-		fill(1, E={_, _, _}) -> height(E);
-		 *
-		fill(_, N) when is_integer(N) -> N;
-		 *
-		fill({1, R}, {N, El, Er}) ->
-		Er1 = fill(R, Er),
-		D = max(height(El), base(Er1)),
-		norm_ev({N, D, Er1});
-		 *
-		fill({L, 1}, {N, El, Er}) ->
-		El1 = fill(L, El),
-		D = max(height(Er), base(El1)),
-		norm_ev({N, El1, D});
-		 *
-		fill({L, R}, {N, El, Er}) ->
-		norm_ev({N, fill(L, El), fill(R, Er)}).
-		*/
 	}
 
 	protected static int grow(Id i, Event e) {
@@ -183,30 +165,6 @@ public class Stamp {
 		}
 
 		return -1;
-		/*
-		grow(1, N) when is_integer(N)->
-		{0, N + 1};
-		 * 
-		grow(I, N) when is_integer(N)->
-		{H, E} = grow(I, {N, 0, 0}),
-		{H + 1000, E}.
-		 *
-		grow({0, I}, {N, L, R}) ->
-		{H, E1} = grow(I, R),
-		{H + 1, {N, L, E1}};
-		 *
-		grow({I, 0}, {N, L, R}) ->
-		{H, E1} = grow(I, L),
-		{H + 1, {N, E1, R}};
-		 *
-		grow({Il, Ir}, {N, L, R}) ->
-		{Hl, El} = grow(Il, L),
-		{Hr, Er} = grow(Ir, R),
-		if
-		Hl < Hr -> {Hl + 1, {N, El, R}};
-		true ->    {Hr + 1, {N, L, Er}}
-		end;
-		*/
 	}
 
 	public char[] Encode() {
@@ -224,7 +182,6 @@ public class Stamp {
 
 		this.id.decode(bt);
 		this.event.decode(bt);
-
 	}
 
 	public BitArray encode() {
