@@ -26,8 +26,10 @@ public class Id {
 	public Id(Id i) {
 		this.isLeaf = i.isLeaf;
 		this.value = i.getValue();
-		this.left = i.getLeft();
-		this.right = i.getRight();
+		Id el = i.getLeft();
+		Id er = i.getRight();
+		this.left = (el==null) ? null : el.clone();
+		this.right = (er==null) ? null : er.clone();
 	}
 
 	public Id split() { // split shall return the right hand id of the result, while making himself the left hand id
@@ -148,41 +150,23 @@ public class Id {
 		return res;
 	}
 
-	public void sum(Id i1, Id i2) { // this becomes the sum between i1 and i2
+	public static void sum(Id i1, Id i2) { // this becomes the sum between i1 and i2
 
-		this.left = new Id();
-		this.right = new Id();
+		//sum(0, X) -> X;
+		//sum(X, 0) -> X;
+		//sum({L1,R1}, {L2, R2}) -> norm_id({sum(L1, L2), sum(R1, R2)}).
 
-		if (i1.isLeaf && i1.getValue() == 0 && i2.isLeaf && i2.getValue() == 0) {
-			this.setAsLeaf();
-			this.value = 0;
-		} else if (i1.isLeaf && i1.getValue() == 0 && (i2.getValue() == 1 || i2.isLeaf == false)) { // sum(0, X) -> X;
-			if (i2.isLeaf) {
-				this.setAsLeaf();
-			} else if (i2.isLeaf == false) {
-				this.setAsNode();
-			}
-			this.value = i2.getValue();
-			this.left = i2.getLeft();
-			this.right = i2.getRight();
-		} else if ((i1.getValue() == 1 || i1.isLeaf == false) && i2.isLeaf && i2.getValue() == 0) { // sum(X, 0) -> X;
-			if (i1.isLeaf) {
-				this.setAsLeaf();
-			} else if (i1.isLeaf == false) {
-				this.setAsNode();
-			}
-			this.value = i1.getValue();
-			this.left = i1.getLeft();
-			this.right = i1.getRight();
-		} else if (i1.isLeaf == false && i2.isLeaf == false) { // sum({L1,R1}, {L2, R2}) -> norm_id({sum(L1, L2), sum(R1, R2)}).
-			this.setAsNode();
-			this.left.sum(i1.getLeft(), i2.getLeft());
-			this.right.sum(i1.getRight(), i2.getRight());
-			this.normalize();
+		if (i1.isLeaf && i1.getValue() == 0) {
+			i1.copy(i2);
+		} else if (i2.isLeaf && i2.getValue() == 0) {
+			//i1 is the result
+		} else if (i1.isLeaf == false &&  i2.isLeaf == false) {
+			Id.sum(i1.getLeft(), i2.getLeft());
+			Id.sum(i1.getRight(), i2.getRight());
+			i1.normalize();
 		} else {
-			System.out.println("fail Id ..." + this.toString());
-			System.out.println("flail heck ..." + i1.getValue() + " " + i2.getValue());
-		}// else do nothing
+			System.out.println("SUM ID fail ..." + i1.getValue() + " " + i2.getValue());
+		}
 	}
 
 	public void normalize() {
@@ -196,6 +180,17 @@ public class Id {
 			this.left = this.right = null;
 		}// else do nothing
 	}
+
+
+	public void copy(Id i) {
+		this.isLeaf = i.isLeaf;
+		this.value = i.getValue();
+		Id el = i.getLeft();
+		Id er = i.getRight();
+		this.left = (el==null) ? null : el;
+		this.right = (er==null) ? null : er;
+	}
+
 
 	public char[] dEncode() {
 		return this.encode(null).unify();
@@ -294,19 +289,13 @@ public class Id {
 	}
 
 	public Id getLeft() {
-		if (this.left != null) {
-			return this.left.clone();
-		} else {
-			return null;
-		}
+		if(this.isLeaf) return null;
+		return this.left;
 	}
 
 	public Id getRight() {
-		if (this.right != null) {
-			return this.right.clone();
-		} else {
-			return null;
-		}
+		if(this.isLeaf) return null;
+		return this.right;
 	}
 
 	@Override
@@ -319,14 +308,46 @@ public class Id {
 		}
 	}
 
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Id i = (Id) obj;
+		if (this.isLeaf && i.isLeaf && this.value == i.getValue()) {
+			return true;
+		}
+		if (this.isLeaf == false && i.isLeaf == false && this.left.equals(i.getLeft()) && this.right.equals(i.getRight())) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 79 * hash + (this.isLeaf ? 1 : 0);
+		hash = 79 * hash + this.value;
+		hash = 79 * hash + (this.left != null ? this.left.hashCode() : 0);
+		hash = 79 * hash + (this.right != null ? this.right.hashCode() : 0);
+		return hash;
+	}
+
 	@Override
 	public Id clone() {
 		Id res = new Id();
 
 		res.isLeaf = this.isLeaf;
 		res.setValue(this.value);
-		res.setLeft(this.getLeft());
-		res.setRight(this.getRight());
+		Id el = this.getLeft();
+		Id er = this.getRight();
+		res.setLeft((el==null) ? null : el.clone());
+		res.setRight((er==null) ? null : er.clone());
 		return res;
 	}
 }

@@ -54,8 +54,7 @@ public class Event {
 		} else if (e1.isLeaf && e2.isLeaf) {
 			e1.setValue(Math.max(e1.getValue(), e2.getValue()));
 		} else {
-			System.out.println("fail Event ...is leaf?" + e1.isLeaf + " is leaf?" + e2.isLeaf);
-			System.out.println("flail heck ..." + e1.getValue() + " " + e2.getValue());
+			System.out.println("fail Event fork e1:" + e1.toString() + " e2:" + e2.toString());
 		}
 		e1.normalize();
 
@@ -327,7 +326,9 @@ public class Event {
 		return this.encode(null).unify();
 	}
 
-	// gets e sets
+
+
+	
 	public void setAsLeaf() {
 		this.isLeaf = true;
 		this.left = null;
@@ -357,12 +358,12 @@ public class Event {
 	}
 
 	public Event getLeft() {
-		if(this.isLeaf) return null;
+//		if(this.isLeaf) return null;
 		return this.left;
 	}
 
 	public Event getRight() {
-		if(this.isLeaf) return null;
+//		if(this.isLeaf) return null;
 		return this.right;
 	}
 
@@ -382,6 +383,9 @@ public class Event {
 	}
 
 	public boolean equals(Event e2) {
+		if (e2 == null) {
+			return false;
+		}
 		if (this.isLeaf && e2.isLeaf && this.value == e2.getValue()) {
 			return true;
 		}

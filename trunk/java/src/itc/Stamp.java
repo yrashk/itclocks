@@ -39,7 +39,7 @@ public class Stamp {
 		b.setEvent(st.getEvent().clone());
 
 		if(b.getEvent().equals(st.getEvent()) == false) {
-			System.out.println("NOOOO WTSDGSGVS");
+			System.out.println("NOOOO WTSDGSGVS\nEV1:"+b.getEvent().toString()+"\nEV2:"+st.getEvent().toString());
 		}
 
 		Id[] par = st.getId().split2();
@@ -54,15 +54,14 @@ public class Stamp {
 	}
 
 	public void join(Stamp s2) { // joins two stamps becoming itself the result stamp
-		this.id.sum(this.getId(), s2.getId());
+		Id.sum(this.id, s2.getId());
 		Event.join(this.event,s2.getEvent());
 	}
 
 	public static Stamp join(Stamp s1, Stamp s2) { // joins two stamps, returning the resulting stamp
-		Id i = new Id();
-		i.sum(s1.getId(), s2.getId());
+		Id.sum(s1.getId(), s2.getId());
 		Event.join(s1.getEvent(), s2.getEvent());
-		return new Stamp(i, s1.getEvent());
+		return s1;
 	}
 
 	public Stamp peek() {
