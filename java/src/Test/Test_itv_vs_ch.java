@@ -46,7 +46,7 @@ public class Test_itv_vs_ch {
 
 		int i;
 		int counter = 0;
-		for (i = 0; i < 1000; i++) {
+		for (i = 0; i < 1500; i++) {
 			System.out.println(i + 1 + ": bugs->" +counter);
 			int tipo = dado.iroll(1, 100);
 
@@ -114,26 +114,26 @@ public class Test_itv_vs_ch {
 				bag.push(outb);
 			}
 
-//			CStamp tmp = new CStamp();
-//			tmp = (CStamp) saco.getLast();
-//			Stamp tmpb = new Stamp();
-//			tmpb = (Stamp) bag.getLast();
-//			int len = saco.getSize();
-//
-//			for (int n = 0; n < len - 1; n++) {
-//				boolean a = tmp.equals((CStamp) saco.getInd(n));
-//
-//				Stamp decd = new Stamp();
-//				char[] coise = bag.getInd(n).Encode();
-//				decd.Decode(coise);
-////				decd.dDecode(bag.getInd(n).dEncode());
-//				boolean b = tmpb.equals(decd);
-////				boolean b = tmpb.equals((Stamp) bag.getInd(n));
-//				if (!((a && b) || (!a && !b))) {
-//					System.out.println("Devia ser "+a+", mas e "+b+"\n\t"+tmpb.toString()+ "   E    "+decd.toString());
-//					counter++;
-//				}
-//			}
+			CStamp tmp = new CStamp();
+			tmp = (CStamp) saco.getLast();
+			Stamp tmpb = new Stamp();
+			tmpb = (Stamp) bag.getLast();
+			int len = saco.getSize();
+
+			for (int n = 0; n < len - 1; n++) {
+				boolean a = tmp.equals((CStamp) saco.getInd(n));
+
+				Stamp decd = new Stamp();
+				char[] coise = bag.getInd(n).Encode();
+				decd.Decode(coise);
+//				decd.dDecode(bag.getInd(n).dEncode());
+				boolean b = tmpb.equals(decd);
+//				boolean b = tmpb.equals((Stamp) bag.getInd(n));
+				if (!((a && b) || (!a && !b))) {
+					System.out.println("Devia ser "+a+", mas e "+b+"\n\t"+tmpb.toString()+ "   E    "+decd.toString());
+					counter++;
+				}
+			}
 
 		}
 
