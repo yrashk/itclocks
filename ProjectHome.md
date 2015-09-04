@@ -1,0 +1,7 @@
+# Interval Tree Clocks #
+
+Classic causality tracking mechanisms, such as version vectors and vector clocks, have been designed under the assumption of a fixed, well known, set of participants. These mechanisms are less than ideal when applied to dynamic scenarios, subject to variable numbers of participants and churn.  E.g. in the Amazon Dynamo system old entries on version vectors are pruned to conserve space, and errors can be introduced.
+
+Interval Tree Clocks (ITC) is a new clock mechanism that can be used in scenarios with a dynamic number of participants, allowing a completely decentralized creation of processes/replicas without need for global identifiers. The mechanism has a variable size representation that adapts automatically to the number of existing entities, growing or shrinking appropriately.
+
+Here we provide reference implementations of ITCs in Java, C and Erlang, and appropriate import and export methods to a common serialized representation. In [Sample Run](http://code.google.com/p/itclocks/wiki/SimpleDemoRun) we provide an example on how to use the API in both languages. Further information can be found [here](http://code.google.com/p/itclocks/wiki/UseCases) and full details in the [Conference Paper](http://gsd.di.uminho.pt/members/cbm/ps/itc2008.pdf), published in Opodis 2009.
